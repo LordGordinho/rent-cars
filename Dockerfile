@@ -1,0 +1,14 @@
+FROM node:16.17.0
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+RUN npm install
+
+COPY . . 
+
+EXPOSE 3333
+
+RUN yarn prisma generate
+CMD ["yarn", "dev"]

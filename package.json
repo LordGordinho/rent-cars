@@ -5,13 +5,22 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "migrate": "npx prisma migrate dev --name user-entity && npx prisma generate",
+    "push": "npx prisma db push"
+  },
+  "prisma": {
+    "schema": "src/db/schema.prisma"
   },
   "dependencies": {
+    "@prisma/client": "^4.8.1",
     "@types/csv-parse": "^1.2.2",
     "csv-parse": "^5.3.3",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
+    "prisma": "^4.8.1",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.7.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

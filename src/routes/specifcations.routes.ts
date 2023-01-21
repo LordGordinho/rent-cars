@@ -1,20 +1,17 @@
 import { Router } from 'express';
 
+import { prismaClient } from '../db/primasClient';
 import { SpecificationsRepository } from '../modules/cars/repositories/implementations/SpecificationsRepository';
-import { createSpecificationController } from '../modules/cars/useCases/createSpecification';
+import { createSpecificationController } from '../modules/cars/useCases/createSpecification/CreateSpecificationController';
 
 const specificationsRouter = Router();
 
 const specificationsRepository = SpecificationsRepository.getInstance();
 
-specificationsRouter.post('/', (req, res)=> {
-  const specification = createSpecificationController.handle(req, res);
+specificationsRouter.post('/', createSpecificationController.handle)
 
-  return res.status(201).json(specification);
-})
-
-specificationsRouter.get('/', (req, res)=> {
-  const specifications = specificationsRepository.all();
+specificationsRouter.get('/', async (req, res)=> {
+  const specifications = await prismaClient.specification.findMany();
 
   return res.json(specifications);
 })

@@ -1,17 +1,24 @@
 import { Response, Request} from 'express';
+import { container } from 'tsyringe';
 
 import { Specification } from '../../model/Specification';
 import { CreateSpecificationUseCase } from './CreateSpecificationUseCase';
 
 class CreateSpecificationController {
-  constructor(private createSpecificationUseCase: CreateSpecificationUseCase){}
-
-  handle(req: Request, res: Response): Specification {
+  async handle(req: Request, res: Response) {
+    const createSpecificationUseCase = container.resolve<CreateSpecificationUseCase>(CreateSpecificationUseCase)
     const { name, description } = req.body;
-    const specification = this.createSpecificationUseCase.execute({ name, description});
 
-    return specification;
+    try {
+      const specification = await createSpecificationUseCase.execute({ name, description});
+
+      return res.status(201).json(specification);
+    } catch (error: any) {
+      return res.status(400).json({ error: error.message}); 
+    }
   }
 }
 
-export { CreateSpecificationController }
+const createSpecificationController = new CreateSpecificationController();
+
+export { CreateSpecificationController, createSpecificationController }

@@ -1,19 +1,24 @@
+import { container } from 'tsyringe';
 import { Response, Request} from 'express';
 
-import { Category } from '../../model/Category';
 import { CreateCategoryUseCase } from './CreateCategoryUseCase';
 
 class CreateCategoryController {
-  constructor(private createCategoryUseCase: CreateCategoryUseCase){}
-
-  handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response) {
+    const createCategoryUseCase = container.resolve<CreateCategoryUseCase>(CreateCategoryUseCase)
     const { name, description } = req.body;
-    const category = this.createCategoryUseCase.execute({ name, description});
 
-    if(this.createCategoryUseCase.errors) return res.status(400).json(this.createCategoryUseCase.errors); 
+    try {
+      const category = await createCategoryUseCase.execute({ name, description});
 
-    return res.status(201).json(category);
+      return res.status(201).json(category);
+    } catch (error: any) {
+      return res.status(400).json({ error: error.message}); 
+    }
+    
   }
 }
 
-export { CreateCategoryController }
+const createCategoryController = new CreateCategoryController()
+
+export { CreateCategoryController, createCategoryController }

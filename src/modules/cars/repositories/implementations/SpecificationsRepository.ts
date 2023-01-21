@@ -1,13 +1,9 @@
+import { prismaClient } from "../../../../db/primasClient";
 import { Specification } from "../../model/Specification";
 import { ISpecificationsRepository, ICreateSpecificationDTO } from "../interfaces/ISpecificationsRepository";
 
 class SpecificationsRepository implements ISpecificationsRepository{
   private static instance: SpecificationsRepository;
-  private categories: Specification[];
-
-  private constructor() {
-    this.categories = []
-  }
 
   static getInstance(): SpecificationsRepository {
     if (!SpecificationsRepository.instance) {
@@ -17,26 +13,18 @@ class SpecificationsRepository implements ISpecificationsRepository{
     return SpecificationsRepository.instance;
   }
 
-  create({ name, description}: ICreateSpecificationDTO): Specification {
-    const specification = new Specification;
-
-    Object.assign(specification, {
-      name,
-      description,
-      created_at: new Date
-    });
-
-    this.categories.push(specification);
+  async create({ name, description}: ICreateSpecificationDTO): Promise<Specification> {
+    const specification = await prismaClient.specification.create({data: { name, description }})
 
     return specification;
   }
 
-  all(): Specification[] {
-    return this.categories;
+  async all(): Promise<Specification[]> {
+    return prismaClient.specification.findMany();
   }
 
-  findByName(name: string): Specification | void {
-    const specification = this.categories.find( specification => specification.name === name);
+  async findByName(name: string): Promise<Specification | null> {
+    const specification = prismaClient.specification.findFirst({where: { name }});
     
     return specification;
   }
