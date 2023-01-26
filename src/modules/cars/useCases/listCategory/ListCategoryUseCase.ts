@@ -1,4 +1,4 @@
-import { Category } from "../../model/Category";
+import { Category } from "../../entities/Category";
 import { CategoriesRepository } from "../../repositories/implementations/CategoriesRepository";
 import { ICategoriesRepository } from "../../repositories/interfaces/ICategoriesRepository";
 import { prismaClient } from "../../../../db/primasClient";

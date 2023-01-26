@@ -12,10 +12,10 @@ datasource db {
 }
 
 model Category {
-  id            String          @id       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String
-  description   String
-  created_at    DateTime                  @default(now())
+  id              String          @id       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  description     String
+  created_at      DateTime                  @default(now())
 
   @@map("categories")
 }
@@ -23,8 +23,21 @@ model Category {
 model Specification {
   id              String        @id       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name            String
-  description      String
+  description     String
   created_at      DateTime                @default(now())
 
   @@map("specifications")
+}
+
+model User {
+  id              String        @id       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  username        String
+  email           String
+  password        String
+  driver_license  String
+  isAdmin         Boolean                 @default(false)
+  created_at      DateTime                @default(now())
+
+  @@map("users")
 }

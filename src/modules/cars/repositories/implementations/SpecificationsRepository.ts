@@ -1,5 +1,5 @@
 import { prismaClient } from "../../../../db/primasClient";
-import { Specification } from "../../model/Specification";
+import { Specification } from "../../entities/Specification";
 import { ISpecificationsRepository, ICreateSpecificationDTO } from "../interfaces/ISpecificationsRepository";
 
 class SpecificationsRepository implements ISpecificationsRepository{
